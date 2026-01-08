@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+         http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>com.dangcai</groupId>
+        <artifactId>dang-cai-dang-yong</artifactId>
+        <version>1.0.0</version>
+    </parent>
+
+    <artifactId>server-business</artifactId>
+    <name>业务模块</name>
+    <description>分类、产品、政策、课堂、工单、需求</description>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.dangcai</groupId>
+            <artifactId>server-common</artifactId>
+        </dependency>
+
+        <!-- EasyExcel -->
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>easyexcel</artifactId>
+        </dependency>
+    </dependencies>
+
+</project>

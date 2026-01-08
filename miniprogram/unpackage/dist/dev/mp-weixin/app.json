@@ -1,0 +1,55 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/login/index",
+    "pages/policy/list",
+    "pages/policy/detail",
+    "pages/course/list",
+    "pages/course/detail",
+    "pages/enterprise/list",
+    "pages/enterprise/detail",
+    "pages/enterprise/products",
+    "pages/enterprise/contact-edit",
+    "pages/help/submit",
+    "pages/help/my-list",
+    "pages/purchase/submit",
+    "pages/purchase/my-list",
+    "pages/profile/index"
+  ],
+  "window": {
+    "navigationBarTextStyle": "white",
+    "navigationBarTitleText": "当才当用",
+    "navigationBarBackgroundColor": "#667eea",
+    "backgroundColor": "#F8F8F8"
+  },
+  "tabBar": {
+    "color": "#666666",
+    "selectedColor": "#667eea",
+    "backgroundColor": "#ffffff",
+    "borderStyle": "black",
+    "list": [
+      {
+        "pagePath": "pages/index/index",
+        "text": "首页"
+      },
+      {
+        "pagePath": "pages/enterprise/list",
+        "text": "企业"
+      },
+      {
+        "pagePath": "pages/help/submit",
+        "text": "求助"
+      },
+      {
+        "pagePath": "pages/profile/index",
+        "text": "我的"
+      }
+    ]
+  },
+  "permission": {
+    "scope.userLocation": {
+      "desc": "您的位置信息将用于小程序位置接口的效果展示"
+    }
+  },
+  "usingComponents": {}
+}

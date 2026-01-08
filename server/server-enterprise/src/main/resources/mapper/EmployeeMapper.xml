@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dangcai.enterprise.mapper.EmployeeMapper">
+
+    <!-- 查询员工列表（含企业名称、用户名） -->
+    <select id="selectEmployeeList" resultType="com.dangcai.enterprise.vo.EmployeeVO">
+        SELECT
+            e.id,
+            e.enterprise_id,
+            ent.enterprise_name,
+            e.user_id,
+            u.username,
+            e.employee_name,
+            e.phone,
+            e.position,
+            e.department,
+            e.is_admin,
+            CASE e.is_admin
+                WHEN 0 THEN '否'
+                WHEN 1 THEN '是'
+                ELSE '未知'
+            END AS is_admin_name,
+            e.status,
+            CASE e.status
+                WHEN 0 THEN '离职'
+                WHEN 1 THEN '在职'
+                ELSE '未知'
+            END AS status_name,
+            e.join_date,
+            e.remark,
+            e.create_time,
+            e.update_time
+        FROM ent_employee e
+        LEFT JOIN ent_enterprise ent ON e.enterprise_id = ent.id AND ent.del_flag = 0
+        LEFT JOIN sys_user u ON e.user_id = u.id AND u.del_flag = 0
+        <where>
+            e.del_flag = 0
+            <if test="enterpriseId != null">
+                AND e.enterprise_id = #{enterpriseId}
+            </if>
+            <if test="employeeName != null and employeeName != ''">
+                AND e.employee_name LIKE CONCAT('%', #{employeeName}, '%')
+            </if>
+            <if test="phone != null and phone != ''">
+                AND e.phone = #{phone}
+            </if>
+            <if test="department != null and department != ''">
+                AND e.department = #{department}
+            </if>
+            <if test="isAdmin != null">
+                AND e.is_admin = #{isAdmin}
+            </if>
+            <if test="status != null">
+                AND e.status = #{status}
+            </if>
+        </where>
+        ORDER BY e.create_time DESC
+    </select>
+
+    <!-- 根据ID查询员工VO -->
+    <select id="selectEmployeeVOById" resultType="com.dangcai.enterprise.vo.EmployeeVO">
+        SELECT
+            e.id,
+            e.enterprise_id,
+            ent.enterprise_name,
+            e.user_id,
+            u.username,
+            e.employee_name,
+            e.phone,
+            e.position,
+            e.department,
+            e.is_admin,
+            CASE e.is_admin
+                WHEN 0 THEN '否'
+                WHEN 1 THEN '是'
+                ELSE '未知'
+            END AS is_admin_name,
+            e.status,
+            CASE e.status
+                WHEN 0 THEN '离职'
+                WHEN 1 THEN '在职'
+                ELSE '未知'
+            END AS status_name,
+            e.join_date,
+            e.remark,
+            e.create_time,
+            e.update_time
+        FROM ent_employee e
+        LEFT JOIN ent_enterprise ent ON e.enterprise_id = ent.id AND ent.del_flag = 0
+        LEFT JOIN sys_user u ON e.user_id = u.id AND u.del_flag = 0
+        WHERE e.id = #{id} AND e.del_flag = 0
+    </select>
+
+    <!-- 根据用户ID查询员工 -->
+    <select id="selectByUserId" resultType="com.dangcai.enterprise.domain.Employee">
+        SELECT
+            id,
+            enterprise_id,
+            user_id,
+            employee_name,
+            phone,
+            position,
+            department,
+            is_admin,
+            status,
+            join_date,
+            remark
+        FROM ent_employee
+        WHERE user_id = #{userId} AND del_flag = 0
+        LIMIT 1
+    </select>
+
+    <!-- 查询企业的员工数量 -->
+    <select id="countByEnterpriseId" resultType="int">
+        SELECT COUNT(*)
+        FROM ent_employee
+        WHERE enterprise_id = #{enterpriseId} AND del_flag = 0
+    </select>
+
+</mapper>

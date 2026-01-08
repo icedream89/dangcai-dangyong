@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dangcai.business.mapper.CategoryMapper">
+
+    <!-- 查询所有分类（用于构建树形结构） -->
+    <select id="selectAllForTree" resultType="com.dangcai.business.vo.CategoryVO">
+        SELECT
+            id,
+            parent_id,
+            category_name,
+            category_code,
+            icon,
+            image,
+            manage_mode,
+            sort_order,
+            status,
+            CASE status
+                WHEN 0 THEN '禁用'
+                WHEN 1 THEN '正常'
+                ELSE '未知'
+            END AS status_name,
+            create_time,
+            update_time
+        FROM biz_category
+        <where>
+            del_flag = 0
+            <if test="status != null">
+                AND status = #{status}
+            </if>
+        </where>
+        ORDER BY sort_order ASC, id ASC
+    </select>
+
+    <!-- 查询子分类列表 -->
+    <select id="selectByParentId" resultType="com.dangcai.business.domain.Category">
+        SELECT
+            id,
+            parent_id,
+            category_name,
+            category_code,
+            icon,
+            image,
+            manage_mode,
+            sort_order,
+            status
+        FROM biz_category
+        WHERE parent_id = #{parentId} AND del_flag = 0
+        ORDER BY sort_order ASC, id ASC
+    </select>
+
+    <!-- 查询分类及其所有子分类的数量 -->
+    <select id="countWithChildren" resultType="int">
+        WITH RECURSIVE category_tree AS (
+            -- 当前分类
+            SELECT id FROM biz_category WHERE id = #{categoryId} AND del_flag = 0
+            UNION ALL
+            -- 子分类
+            SELECT c.id FROM biz_category c
+            INNER JOIN category_tree ct ON c.parent_id = ct.id
+            WHERE c.del_flag = 0
+        )
+        SELECT COUNT(*) FROM category_tree
+    </select>
+
+</mapper>

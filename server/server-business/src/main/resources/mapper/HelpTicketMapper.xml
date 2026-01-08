@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dangcai.business.mapper.HelpTicketMapper">
+
+    <!-- 查询工单列表（含企业名称、处理人名称） -->
+    <select id="selectHelpTicketList" resultType="com.dangcai.business.vo.HelpTicketVO">
+        SELECT
+            t.id,
+            t.ticket_no,
+            t.enterprise_id,
+            e.enterprise_name,
+            t.user_id,
+            t.user_name,
+            t.user_phone,
+            t.help_type,
+            CASE t.help_type
+                WHEN 1 THEN '技术咨询'
+                WHEN 2 THEN '故障报修'
+                WHEN 3 THEN '服务请求'
+                WHEN 4 THEN '投诉建议'
+                ELSE '未知'
+            END AS help_type_name,
+            t.title,
+            t.content,
+            t.images,
+            t.priority,
+            CASE t.priority
+                WHEN 1 THEN '紧急'
+                WHEN 2 THEN '普通'
+                WHEN 3 THEN '低'
+                ELSE '未知'
+            END AS priority_name,
+            t.status,
+            CASE t.status
+                WHEN 1 THEN '待处理'
+                WHEN 2 THEN '处理中'
+                WHEN 3 THEN '已完成'
+                WHEN 4 THEN '已关闭'
+                ELSE '未知'
+            END AS status_name,
+            t.handler_id,
+            u.nick_name AS handler_name,
+            t.handle_result,
+            t.handle_time,
+            t.satisfaction,
+            t.feedback,
+            t.create_time,
+            t.update_time
+        FROM biz_help_ticket t
+        LEFT JOIN ent_enterprise e ON t.enterprise_id = e.id AND e.del_flag = 0
+        LEFT JOIN sys_user u ON t.handler_id = u.user_id
+        <where>
+            t.del_flag = 0
+            <if test="ticketNo != null and ticketNo != ''">
+                AND t.ticket_no = #{ticketNo}
+            </if>
+            <if test="enterpriseId != null">
+                AND t.enterprise_id = #{enterpriseId}
+            </if>
+            <if test="userId != null">
+                AND t.user_id = #{userId}
+            </if>
+            <if test="helpType != null">
+                AND t.help_type = #{helpType}
+            </if>
+            <if test="priority != null">
+                AND t.priority = #{priority}
+            </if>
+            <if test="status != null">
+                AND t.status = #{status}
+            </if>
+            <if test="title != null and title != ''">
+                AND t.title LIKE CONCAT('%', #{title}, '%')
+            </if>
+            <if test="startTime != null and startTime != ''">
+                AND t.create_time &gt;= #{startTime}
+            </if>
+            <if test="endTime != null and endTime != ''">
+                AND t.create_time &lt;= #{endTime}
+            </if>
+        </where>
+        ORDER BY t.priority ASC, t.create_time DESC
+    </select>
+
+    <!-- 根据ID查询工单VO（含企业名称、处理人名称） -->
+    <select id="selectHelpTicketVOById" resultType="com.dangcai.business.vo.HelpTicketVO">
+        SELECT
+            t.id,
+            t.ticket_no,
+            t.enterprise_id,
+            e.enterprise_name,
+            t.user_id,
+            t.user_name,
+            t.user_phone,
+            t.help_type,
+            CASE t.help_type
+                WHEN 1 THEN '技术咨询'
+                WHEN 2 THEN '故障报修'
+                WHEN 3 THEN '服务请求'
+                WHEN 4 THEN '投诉建议'
+                ELSE '未知'
+            END AS help_type_name,
+            t.title,
+            t.content,
+            t.images,
+            t.priority,
+            CASE t.priority
+                WHEN 1 THEN '紧急'
+                WHEN 2 THEN '普通'
+                WHEN 3 THEN '低'
+                ELSE '未知'
+            END AS priority_name,
+            t.status,
+            CASE t.status
+                WHEN 1 THEN '待处理'
+                WHEN 2 THEN '处理中'
+                WHEN 3 THEN '已完成'
+                WHEN 4 THEN '已关闭'
+                ELSE '未知'
+            END AS status_name,
+            t.handler_id,
+            u.nick_name AS handler_name,
+            t.handle_result,
+            t.handle_time,
+            t.satisfaction,
+            t.feedback,
+            t.create_time,
+            t.update_time
+        FROM biz_help_ticket t
+        LEFT JOIN ent_enterprise e ON t.enterprise_id = e.id AND e.del_flag = 0
+        LEFT JOIN sys_user u ON t.handler_id = u.user_id
+        WHERE t.id = #{id} AND t.del_flag = 0
+    </select>
+
+    <!-- 增加工单浏览次数 -->
+    <update id="increaseViewCount">
+        UPDATE biz_help_ticket
+        SET view_count = view_count + 1
+        WHERE id = #{id} AND del_flag = 0
+    </update>
+
+</mapper>

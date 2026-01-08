@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dangcai.business.mapper.PolicyMapper">
+
+    <!-- 分页查询政策列表 -->
+    <select id="selectPolicyList" resultType="com.dangcai.business.vo.PolicyVO">
+        SELECT
+            id,
+            policy_title,
+            policy_no,
+            policy_type,
+            publish_date,
+            publish_dept,
+            apply_start_date,
+            apply_end_date,
+            cover_image,
+            summary,
+            content,
+            attachments,
+            tags,
+            view_count,
+            is_hot,
+            is_top,
+            status,
+            CASE status
+                WHEN 0 THEN '下架'
+                WHEN 1 THEN '发布'
+                ELSE '未知'
+            END AS status_name,
+            publish_time,
+            create_time,
+            update_time
+        FROM biz_policy
+        <where>
+            del_flag = 0
+            <if test="policyTitle != null and policyTitle != ''">
+                AND policy_title LIKE CONCAT('%', #{policyTitle}, '%')
+            </if>
+            <if test="policyType != null and policyType != ''">
+                AND policy_type = #{policyType}
+            </if>
+            <if test="status != null">
+                AND status = #{status}
+            </if>
+            <if test="isHot != null">
+                AND is_hot = #{isHot}
+            </if>
+            <if test="isTop != null">
+                AND is_top = #{isTop}
+            </if>
+        </where>
+        ORDER BY is_top DESC, publish_time DESC, create_time DESC
+    </select>
+
+    <!-- 根据ID查询政策VO -->
+    <select id="selectPolicyVOById" resultType="com.dangcai.business.vo.PolicyVO">
+        SELECT
+            id,
+            policy_title,
+            policy_no,
+            policy_type,
+            publish_date,
+            publish_dept,
+            apply_start_date,
+            apply_end_date,
+            cover_image,
+            summary,
+            content,
+            attachments,
+            tags,
+            view_count,
+            is_hot,
+            is_top,
+            status,
+            CASE status
+                WHEN 0 THEN '下架'
+                WHEN 1 THEN '发布'
+                ELSE '未知'
+            END AS status_name,
+            publish_time,
+            create_time,
+            update_time
+        FROM biz_policy
+        WHERE id = #{id} AND del_flag = 0
+    </select>
+
+    <!-- 增加浏览次数 -->
+    <update id="increaseViewCount">
+        UPDATE biz_policy
+        SET view_count = view_count + 1
+        WHERE id = #{id} AND del_flag = 0
+    </update>
+
+</mapper>

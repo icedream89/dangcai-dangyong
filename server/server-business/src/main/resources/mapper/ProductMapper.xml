@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dangcai.business.mapper.ProductMapper">
+
+    <!-- 分页查询产品列表 -->
+    <select id="selectProductList" resultType="com.dangcai.business.vo.ProductVO">
+        SELECT
+            p.id,
+            p.enterprise_id,
+            e.enterprise_name,
+            p.product_name,
+            p.category,
+            p.price,
+            p.unit,
+            p.cover_image,
+            p.images,
+            p.description,
+            p.specs,
+            p.recommend_weight,
+            CASE
+                WHEN p.recommend_weight &gt;= 80 THEN '热门'
+                WHEN p.recommend_weight &gt;= 50 THEN '推荐'
+                ELSE '普通'
+            END AS recommend_level,
+            p.sales_count,
+            p.view_count,
+            p.status,
+            CASE p.status
+                WHEN 0 THEN '下架'
+                WHEN 1 THEN '上架'
+                ELSE '未知'
+            END AS status_name,
+            p.create_time,
+            p.update_time
+        FROM biz_product p
+        LEFT JOIN ent_enterprise e ON p.enterprise_id = e.id AND e.del_flag = 0
+        <where>
+            p.del_flag = 0
+            <if test="enterpriseId != null">
+                AND p.enterprise_id = #{enterpriseId}
+            </if>
+            <if test="productName != null and productName != ''">
+                AND p.product_name LIKE CONCAT('%', #{productName}, '%')
+            </if>
+            <if test="category != null and category != ''">
+                AND p.category = #{category}
+            </if>
+            <if test="minRecommendWeight != null">
+                AND p.recommend_weight &gt;= #{minRecommendWeight}
+            </if>
+            <if test="maxRecommendWeight != null">
+                AND p.recommend_weight &lt;= #{maxRecommendWeight}
+            </if>
+            <if test="status != null">
+                AND p.status = #{status}
+            </if>
+        </where>
+        ORDER BY p.recommend_weight DESC, p.create_time DESC
+    </select>
+
+    <!-- 根据ID查询产品VO -->
+    <select id="selectProductVOById" resultType="com.dangcai.business.vo.ProductVO">
+        SELECT
+            p.id,
+            p.enterprise_id,
+            e.enterprise_name,
+            p.product_name,
+            p.category,
+            p.price,
+            p.unit,
+            p.cover_image,
+            p.images,
+            p.description,
+            p.specs,
+            p.recommend_weight,
+            CASE
+                WHEN p.recommend_weight &gt;= 80 THEN '热门'
+                WHEN p.recommend_weight &gt;= 50 THEN '推荐'
+                ELSE '普通'
+            END AS recommend_level,
+            p.sales_count,
+            p.view_count,
+            p.status,
+            CASE p.status
+                WHEN 0 THEN '下架'
+                WHEN 1 THEN '上架'
+                ELSE '未知'
+            END AS status_name,
+            p.create_time,
+            p.update_time
+        FROM biz_product p
+        LEFT JOIN ent_enterprise e ON p.enterprise_id = e.id AND e.del_flag = 0
+        WHERE p.id = #{id} AND p.del_flag = 0
+    </select>
+
+    <!-- 增加浏览次数 -->
+    <update id="increaseViewCount">
+        UPDATE biz_product
+        SET view_count = view_count + 1
+        WHERE id = #{id} AND del_flag = 0
+    </update>
+
+    <!-- 增加销量 -->
+    <update id="increaseSalesCount">
+        UPDATE biz_product
+        SET sales_count = sales_count + #{quantity}
+        WHERE id = #{id} AND del_flag = 0
+    </update>
+
+</mapper>

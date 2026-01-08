@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+         http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>com.dangcai</groupId>
+        <artifactId>dang-cai-dang-yong</artifactId>
+        <version>1.0.0</version>
+    </parent>
+
+    <artifactId>server-system</artifactId>
+    <name>系统模块</name>
+    <description>用户、角色、菜单、权限管理</description>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.dangcai</groupId>
+            <artifactId>server-common</artifactId>
+        </dependency>
+
+        <!-- Spring Security -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-security</artifactId>
+        </dependency>
+
+        <!-- Spring AOP -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-aop</artifactId>
+        </dependency>
+
+        <!-- UserAgentUtils -->
+        <dependency>
+            <groupId>eu.bitwalker</groupId>
+            <artifactId>UserAgentUtils</artifactId>
+            <version>1.21</version>
+        </dependency>
+    </dependencies>
+
+</project>

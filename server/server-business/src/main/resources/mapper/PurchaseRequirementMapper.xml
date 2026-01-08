@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dangcai.business.mapper.PurchaseRequirementMapper">
+
+    <!-- 查询采购需求列表（含企业名称） -->
+    <select id="selectPurchaseRequirementList" resultType="com.dangcai.business.vo.PurchaseRequirementVO">
+        SELECT
+            r.id,
+            r.requirement_no,
+            r.enterprise_id,
+            e.enterprise_name,
+            r.user_id,
+            r.user_name,
+            r.user_phone,
+            r.title,
+            r.category,
+            r.content,
+            r.budget,
+            r.expect_date,
+            r.address,
+            r.images,
+            r.view_count,
+            r.reply_count,
+            r.status,
+            CASE r.status
+                WHEN 1 THEN '待匹配'
+                WHEN 2 THEN '已匹配'
+                WHEN 3 THEN '已完成'
+                WHEN 4 THEN '已关闭'
+                ELSE '未知'
+            END AS status_name,
+            r.create_time,
+            r.update_time
+        FROM biz_purchase_requirement r
+        LEFT JOIN ent_enterprise e ON r.enterprise_id = e.id AND e.del_flag = 0
+        <where>
+            r.del_flag = 0
+            <if test="requirementNo != null and requirementNo != ''">
+                AND r.requirement_no = #{requirementNo}
+            </if>
+            <if test="enterpriseId != null">
+                AND r.enterprise_id = #{enterpriseId}
+            </if>
+            <if test="userId != null">
+                AND r.user_id = #{userId}
+            </if>
+            <if test="category != null and category != ''">
+                AND r.category = #{category}
+            </if>
+            <if test="status != null">
+                AND r.status = #{status}
+            </if>
+            <if test="title != null and title != ''">
+                AND r.title LIKE CONCAT('%', #{title}, '%')
+            </if>
+            <if test="startTime != null and startTime != ''">
+                AND r.create_time &gt;= #{startTime}
+            </if>
+            <if test="endTime != null and endTime != ''">
+                AND r.create_time &lt;= #{endTime}
+            </if>
+        </where>
+        ORDER BY r.create_time DESC
+    </select>
+
+    <!-- 根据ID查询采购需求VO（含企业名称） -->
+    <select id="selectPurchaseRequirementVOById" resultType="com.dangcai.business.vo.PurchaseRequirementVO">
+        SELECT
+            r.id,
+            r.requirement_no,
+            r.enterprise_id,
+            e.enterprise_name,
+            r.user_id,
+            r.user_name,
+            r.user_phone,
+            r.title,
+            r.category,
+            r.content,
+            r.budget,
+            r.expect_date,
+            r.address,
+            r.images,
+            r.view_count,
+            r.reply_count,
+            r.status,
+            CASE r.status
+                WHEN 1 THEN '待匹配'
+                WHEN 2 THEN '已匹配'
+                WHEN 3 THEN '已完成'
+                WHEN 4 THEN '已关闭'
+                ELSE '未知'
+            END AS status_name,
+            r.create_time,
+            r.update_time
+        FROM biz_purchase_requirement r
+        LEFT JOIN ent_enterprise e ON r.enterprise_id = e.id AND e.del_flag = 0
+        WHERE r.id = #{id} AND r.del_flag = 0
+    </select>
+
+    <!-- 增加浏览次数 -->
+    <update id="increaseViewCount">
+        UPDATE biz_purchase_requirement
+        SET view_count = view_count + 1
+        WHERE id = #{id} AND del_flag = 0
+    </update>
+
+    <!-- 增加回复数量 -->
+    <update id="increaseReplyCount">
+        UPDATE biz_purchase_requirement
+        SET reply_count = reply_count + 1
+        WHERE id = #{id} AND del_flag = 0
+    </update>
+
+    <!-- 减少回复数量 -->
+    <update id="decreaseReplyCount">
+        UPDATE biz_purchase_requirement
+        SET reply_count = reply_count - 1
+        WHERE id = #{id} AND del_flag = 0 AND reply_count > 0
+    </update>
+
+</mapper>

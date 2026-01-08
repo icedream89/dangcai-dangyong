@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dangcai.enterprise.mapper.EnterpriseLogMapper">
+
+    <!-- 查询企业的变更记录列表 -->
+    <select id="selectByEnterpriseId" resultType="com.dangcai.enterprise.domain.EnterpriseLog">
+        SELECT
+            id,
+            enterprise_id,
+            operation_type,
+            operation_content,
+            operator,
+            operation_time,
+            remark
+        FROM ent_enterprise_log
+        WHERE enterprise_id = #{enterpriseId}
+        ORDER BY operation_time DESC
+    </select>
+
+</mapper>

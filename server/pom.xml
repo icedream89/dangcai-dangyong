@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0
+         http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <parent>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-starter-parent</artifactId>
+        <version>3.2.0</version>
+        <relativePath/>
+    </parent>
+
+    <groupId>com.dangcai</groupId>
+    <artifactId>dang-cai-dang-yong</artifactId>
+    <version>1.0.0</version>
+    <packaging>pom</packaging>
+    <name>当才当用</name>
+    <description>当阳市科技经济信息商务局企业服务平台</description>
+
+    <modules>
+        <module>server-common</module>
+        <module>server-system</module>
+        <module>server-enterprise</module>
+        <module>server-business</module>
+        <module>server-file</module>
+        <module>server-message</module>
+        <module>server-admin</module>
+        <module>server-miniapp</module>
+    </modules>
+
+    <properties>
+        <java.version>17</java.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <mybatis-plus.version>3.5.5</mybatis-plus.version>
+        <druid.version>1.2.20</druid.version>
+        <jwt.version>0.11.5</jwt.version>
+        <minio.version>8.5.7</minio.version>
+        <hutool.version>5.8.23</hutool.version>
+        <easyexcel.version>3.3.2</easyexcel.version>
+        <knife4j.version>4.3.0</knife4j.version>
+    </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <!-- MyBatis-Plus -->
+            <dependency>
+                <groupId>com.baomidou</groupId>
+                <artifactId>mybatis-plus-boot-starter</artifactId>
+                <version>${mybatis-plus.version}</version>
+            </dependency>
+
+            <!-- Druid 数据源 -->
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>druid-spring-boot-3-starter</artifactId>
+                <version>${druid.version}</version>
+            </dependency>
+
+            <!-- JWT -->
+            <dependency>
+                <groupId>io.jsonwebtoken</groupId>
+                <artifactId>jjwt-api</artifactId>
+                <version>${jwt.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.jsonwebtoken</groupId>
+                <artifactId>jjwt-impl</artifactId>
+                <version>${jwt.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.jsonwebtoken</groupId>
+                <artifactId>jjwt-jackson</artifactId>
+                <version>${jwt.version}</version>
+            </dependency>
+
+            <!-- MinIO -->
+            <dependency>
+                <groupId>io.minio</groupId>
+                <artifactId>minio</artifactId>
+                <version>${minio.version}</version>
+            </dependency>
+
+            <!-- Hutool 工具类 -->
+            <dependency>
+                <groupId>cn.hutool</groupId>
+                <artifactId>hutool-all</artifactId>
+                <version>${hutool.version}</version>
+            </dependency>
+
+            <!-- EasyExcel -->
+            <dependency>
+                <groupId>com.alibaba</groupId>
+                <artifactId>easyexcel</artifactId>
+                <version>${easyexcel.version}</version>
+            </dependency>
+
+            <!-- Knife4j 接口文档 -->
+            <dependency>
+                <groupId>com.github.xiaoymin</groupId>
+                <artifactId>knife4j-openapi3-jakarta-spring-boot-starter</artifactId>
+                <version>${knife4j.version}</version>
+            </dependency>
+
+            <!-- 内部模块依赖 -->
+            <dependency>
+                <groupId>com.dangcai</groupId>
+                <artifactId>server-common</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.dangcai</groupId>
+                <artifactId>server-system</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.dangcai</groupId>
+                <artifactId>server-enterprise</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.dangcai</groupId>
+                <artifactId>server-business</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.dangcai</groupId>
+                <artifactId>server-file</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>com.dangcai</groupId>
+                <artifactId>server-message</artifactId>
+                <version>${project.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
+                    <encoding>${project.build.sourceEncoding}</encoding>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
+
+</project>

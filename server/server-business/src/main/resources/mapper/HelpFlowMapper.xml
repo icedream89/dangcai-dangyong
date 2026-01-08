@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dangcai.business.mapper.HelpFlowMapper">
+
+    <!-- 根据工单ID查询流转记录列表 -->
+    <select id="selectFlowListByTicketId" resultType="com.dangcai.business.vo.HelpFlowVO">
+        SELECT
+            id,
+            ticket_id,
+            from_status,
+            CASE from_status
+                WHEN 1 THEN '待处理'
+                WHEN 2 THEN '处理中'
+                WHEN 3 THEN '已完成'
+                WHEN 4 THEN '已关闭'
+                ELSE '未知'
+            END AS from_status_name,
+            to_status,
+            CASE to_status
+                WHEN 1 THEN '待处理'
+                WHEN 2 THEN '处理中'
+                WHEN 3 THEN '已完成'
+                WHEN 4 THEN '已关闭'
+                ELSE '未知'
+            END AS to_status_name,
+            operator_id,
+            operator_name,
+            operation,
+            remark,
+            create_time
+        FROM biz_help_flow
+        WHERE ticket_id = #{ticketId}
+        ORDER BY create_time DESC
+    </select>
+
+</mapper>

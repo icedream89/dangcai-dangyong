@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dangcai.business.mapper.PurchaseReplyMapper">
+
+    <!-- 根据需求ID查询回复列表 -->
+    <select id="selectReplyListByRequirementId" resultType="com.dangcai.business.vo.PurchaseReplyVO">
+        SELECT
+            id,
+            requirement_id,
+            enterprise_id,
+            enterprise_name,
+            contact_person,
+            contact_phone,
+            reply_content,
+            quote_price,
+            delivery_period,
+            attachments,
+            status,
+            CASE status
+                WHEN 1 THEN '已回复'
+                WHEN 2 THEN '已确认'
+                WHEN 3 THEN '已完成交易'
+                ELSE '未知'
+            END AS status_name,
+            create_time,
+            update_time
+        FROM biz_purchase_reply
+        WHERE requirement_id = #{requirementId}
+        ORDER BY create_time DESC
+    </select>
+
+    <!-- 根据需求ID和企业ID查询回复 -->
+    <select id="selectByRequirementIdAndEnterpriseId" resultType="com.dangcai.business.vo.PurchaseReplyVO">
+        SELECT
+            id,
+            requirement_id,
+            enterprise_id,
+            enterprise_name,
+            contact_person,
+            contact_phone,
+            reply_content,
+            quote_price,
+            delivery_period,
+            attachments,
+            status,
+            CASE status
+                WHEN 1 THEN '已回复'
+                WHEN 2 THEN '已确认'
+                WHEN 3 THEN '已完成交易'
+                ELSE '未知'
+            END AS status_name,
+            create_time,
+            update_time
+        FROM biz_purchase_reply
+        WHERE requirement_id = #{requirementId} AND enterprise_id = #{enterpriseId}
+    </select>
+
+</mapper>

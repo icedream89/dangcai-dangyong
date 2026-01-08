@@ -1,0 +1,77 @@
+{
+  "name": "当才当用项目开发环境",
+  "dockerComposeFile": "docker-compose.yml",
+  "service": "app",
+  "workspaceFolder": "/workspace",
+
+  "features": {
+    "ghcr.io/devcontainers/features/java:1": {
+      "version": "17",
+      "installMaven": "true",
+      "mavenVersion": "3.8.6"
+    },
+    "ghcr.io/devcontainers/features/node:1": {
+      "version": "18"
+    },
+    "ghcr.io/devcontainers/features/docker-in-docker:2": {}
+  },
+
+  "forwardPorts": [8080, 8081, 3000, 9000, 9001],
+
+  "portsAttributes": {
+    "8080": {
+      "label": "后台管理API",
+      "onAutoForward": "openPreview"
+    },
+    "8081": {
+      "label": "小程序API",
+      "onAutoForward": "openPreview"
+    },
+    "3000": {
+      "label": "管理后台前端",
+      "onAutoForward": "openPreview"
+    },
+    "9000": {
+      "label": "MinIO API"
+    },
+    "9001": {
+      "label": "MinIO控制台",
+      "onAutoForward": "openPreview"
+    }
+  },
+
+  "postCreateCommand": "bash .devcontainer/setup.sh",
+
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "vmware.vscode-boot-dev-pack",
+        "gabrielbb.vscode-lombok",
+        "pivotal.vscode-spring-boot",
+        "redhat.vscode-xml",
+        "vscjava.vscode-java-pack",
+        "vmware.vscode-spring-boot-dashboard",
+        "ms-spring.ms-spring-vscode",
+        "humao.rest-client",
+        "GitHub.copilot"
+      ],
+      "settings": {
+        "java.server.launchMode": "Standard",
+        "java.configuration.maven.globalSettings": "/workspace/settings.xml",
+        "java.format.settings.url": "/workspace/eclipse-formatter.xml",
+        "spring.boot.ls.checkJVM": false,
+        "files.exclude": {
+          "**/.git": true,
+          "**/.DS_Store": true,
+          "**/node_modules": true
+        }
+      }
+    }
+  },
+
+  "remoteUser": "vscode",
+  "mounts": [
+    "source=${localWorkspaceFolder}/.m2,target=/home/vscode/.m2,type=bind,consistency=cached",
+    "source=${localWorkspaceFolder}/docker,target=/workspace/docker,type=bind,consistency=cached"
+  ]
+}

@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dangcai.enterprise.mapper.EnterpriseMapper">
+
+    <!-- 查询企业列表（含企业名称模糊查询） -->
+    <select id="selectEnterpriseList" resultType="com.dangcai.enterprise.vo.EnterpriseVO">
+        SELECT
+            id,
+            enterprise_name,
+            unified_code,
+            legal_person,
+            legal_person_phone,
+            registered_capital,
+            establish_date,
+            address,
+            industry,
+            enterprise_type,
+            scale,
+            intro,
+            business_scope,
+            is_recommended,
+            view_count,
+            status,
+            audit_remark,
+            create_time,
+            update_time
+        FROM ent_enterprise
+        <where>
+            del_flag = 0
+            <if test="enterpriseName != null and enterpriseName != ''">
+                AND enterprise_name LIKE CONCAT('%', #{enterpriseName}, '%')
+            </if>
+            <if test="unifiedCode != null and unifiedCode != ''">
+                AND unified_code = #{unifiedCode}
+            </if>
+            <if test="industry != null and industry != ''">
+                AND industry = #{industry}
+            </if>
+            <if test="enterpriseType != null and enterpriseType != ''">
+                AND enterprise_type = #{enterpriseType}
+            </if>
+            <if test="scale != null and scale != ''">
+                AND scale = #{scale}
+            </if>
+            <if test="status != null">
+                AND status = #{status}
+            </if>
+            <if test="isRecommended != null">
+                AND is_recommended = #{isRecommended}
+            </if>
+        </where>
+        ORDER BY is_recommended DESC, create_time DESC
+    </select>
+
+    <!-- 根据ID查询企业VO -->
+    <select id="selectEnterpriseVOById" resultType="com.dangcai.enterprise.vo.EnterpriseVO">
+        SELECT
+            id,
+            enterprise_name,
+            unified_code,
+            legal_person,
+            legal_person_phone,
+            registered_capital,
+            establish_date,
+            address,
+            industry,
+            enterprise_type,
+            scale,
+            intro,
+            business_scope,
+            is_recommended,
+            view_count,
+            status,
+            CASE status
+                WHEN 0 THEN '待审核'
+                WHEN 1 THEN '正常'
+                WHEN 2 THEN '禁用'
+                ELSE '未知'
+            END AS status_name,
+            audit_remark,
+            create_time,
+            update_time
+        FROM ent_enterprise
+        WHERE id = #{id} AND del_flag = 0
+    </select>
+
+    <!-- 增加浏览次数 -->
+    <update id="increaseViewCount">
+        UPDATE ent_enterprise
+        SET view_count = view_count + 1
+        WHERE id = #{id} AND del_flag = 0
+    </update>
+
+</mapper>
